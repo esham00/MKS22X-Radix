@@ -10,7 +10,7 @@ public class Radix {
 	}
 	for(int i = 0; i < data.length; i++) {
 	    int numberOfDigits = length(data[i]);
-	    int digit = getValue(data[i], 10);
+	    int digit = getValue(data[i], 1);
 	    if (numberOfDigits > largestDigit) {
 		largestDigit = numberOfDigits;
 	    }
@@ -23,15 +23,16 @@ public class Radix {
 	    }
 	}
 	combine(merge, buckets);
-	System.out.println(merge);
+	//System.out.println(merge);
 	for(int i = 0; i < largestDigit;i++) {
-	    for(int a = 0; a < merge.size(); a++) {
+	    while(merge.size() > 0){
 		int removed = merge.removeFront();
 		int digit = getValue(removed, (int)Math.pow(10, i+1));
+		//System.out.println(digit);
 		if (removed < 0) {
 		    buckets[9-digit].add(removed);
 		} else {
-		    System.out.println(removed);
+		    //System.out.println(removed);
 		    buckets[digit+10].add(removed);
 		}
 	    }
@@ -42,12 +43,8 @@ public class Radix {
 	}
     }
     private static int getValue(int value, int mod){
-	System.out.println(mod);
-        if (mod != 10 && value % mod == value) {
-	     return 0;
-	} else {
-	    return Math.abs(value%mod);
-	}
+	//System.out.println("value: " +value + "mod: " + mod);
+	return value/mod%10;
     }
     private static int length(int value) {
 	int num = Math.abs(value);
