@@ -3,7 +3,7 @@ public class Radix {
     @SuppressWarnings("unchecked")
     public static void radixsort(int[] data) {
 	MyLinkedList<Integer>[] buckets = new MyLinkedList[20];
-	MyLinkedList merge = new MyLinkedList[data.length];
+	MyLinkedList<Integer> merge = new MyLinkedList();
 	int largestDigit = 0;
 	for(int i = 0; i < buckets.length;i++) {
 	    buckets[i] = new MyLinkedList();
@@ -22,33 +22,47 @@ public class Radix {
 		//System.out.println(buckets[10+digit]);
 	    }
 	}
-	merge.extend(buckets);
+	combine(merge, buckets);
 	for(int i = 0; i < largestDigit;i++) {
-	    int removed = merge.remove(i);
-	    int digit = getValue(removed, Math.pow(10, i));
-	    if (data[i] < 0) {
-		buckets[9-digit].add(removed);
-	    } else {
-		buckets[digit+10].add(removed);
+	    for(int a = 0; a < data.length; a++) {
+		int removed = merge.removeFront();
+		int digit = getValue(removed, (int)Math.pow(10, i));
+		if (removed < 0) {
+		    buckets[9-digit].add(removed);
+		} else {
+		    buckets[digit+10].add(removed);
+		}
 	    }
-	    merge.extend(buckets);
+	    combine(merge,buckets);
 	}
 	for(int i = 0; i < data.length; i++) {
-	    data[i] = merge.remove(i);
+	    data[i] = merge.removeFront();
 	}
-	return data;
     }
     private static int getValue(int value, int mod){
 	return value%mod;
     }
     private static int length(int value) {
 	int num = Math.abs(value);
-	return (int)(Math.log10(n)+1);
+	return (int)(Math.log10(num)+1);
+    }
+    private static void combine(MyLinkedList<Integer> a, MyLinkedList<Integer>[] b) {
+	// int tracker = 0;
+	// try {
+	    for(int i = 0; i < b.length; i++) {
+		a.extend(b[i]);
+	// 	System.out.println(a);
+	// 	tracker++;
+	    }
+	// } catch (NullPointerException e) {
+	//     System.out.println(b[tracker]);
+	//     System.out.println(a);
+	//     System.out.println(tracker);
+	//}
     }
     public static void main(String[] args) {
-	int[] a = new int[]{10,9,3,4,5,2,1};
+	int[] a = new int[]{10,9,3,4,5,2,1,6,7,8};
 	radixsort(a);
 	System.out.print(Arrays.toString(a));
     }
 }
-	
